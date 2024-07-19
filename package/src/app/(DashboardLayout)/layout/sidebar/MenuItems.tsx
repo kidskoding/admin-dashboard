@@ -24,22 +24,6 @@ const Menuitems = [
   },
   {
     navlabel: true,
-    subheader: "Utilities",
-  },
-  {
-    id: uniqueId(),
-    title: "Typography",
-    icon: IconTypography,
-    href: "/utilities/typography",
-  },
-  {
-    id: uniqueId(),
-    title: "Shadow",
-    icon: IconCopy,
-    href: "/utilities/shadow",
-  },
-  {
-    navlabel: true,
     subheader: "Auth",
   },
   {
@@ -69,6 +53,18 @@ const Menuitems = [
     title: "Sample Page",
     icon: IconAperture,
     href: "/sample-page",
+  },
+  {
+    id: uniqueId(),
+    title: "Typography",
+    icon: IconTypography,
+    href: "/utilities/typography",
+  },
+  {
+    id: uniqueId(),
+    title: "Shadow",
+    icon: IconCopy,
+    href: "/utilities/shadow",
   },
 ];
 
