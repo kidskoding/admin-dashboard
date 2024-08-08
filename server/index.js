@@ -1,57 +1,56 @@
-const mysql = require('mysql');
 const express = require('express');
-const session = require('express-session');
-const path = require('path');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const mysql = require('mysql2');
 require('dotenv').config();
 
-const connection = mysql.createConnection({
-    host: 'locahost',
+const app = express();
+const PORT = 8080;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const db = mysql.createConnection({
+    host: 'localhost',
     user: 'root',
     password: process.env.MYSQL_DB_PASSWORD,
-    database: 'login-system',
+    database: 'login-system'
 });
 
-const port = 3000;
-
-const app = express();
-
-app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
-}));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'static')));
-
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/authentication/login'));
+db.connect((err) => {
+    if (err) throw err;
+    console.log('MySQL connected...');
 });
 
-app.post('/auth', function(req, res) {
-    let username = req.body.username;
-    let password = req.body.password;
+app.post('/', async (req, res) => {
+    const { username, email, password } = req.body;
 
-    if(username && password) {
-        connection.query('SELECT * FROM login-system.users WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-            if(error) {
-                throw error;
-            }   
-            if(results.length > 0) {
-                req.session.loggedin = true;
-                req.session.username = username;
-                response.redirect('/')
-            } else {
-                response.send('Incorrect Username and/or Password!');
+    if(!username || !email || !password) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        db.query(
+            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+            [username, email, hashedPassword],
+            (error, results) => {
+                if (error) {
+                    if (error.code === 'ER_DUP_ENTRY') {
+                        return res.status(409).json({ message: 'User already exists' });
+                    }
+                    return res.status(500).json({ message: 'Database error' });
+                }
+                res.status(201).json({ message: 'User registered successfully' });
             }
-            response.end();
-        });
-    } else {
-        response.send('Please enter Username and Password!');
-        response.end();
+        );
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
-app.listen(port, () => {
-    console.log('Server is listening on port', port);
+app.listen(PORT, () => {
+    console.log('Server is running on port', PORT);
 });

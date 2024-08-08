@@ -1,94 +1,160 @@
 "use client";
-import { Grid, Box, Card, Typography, Stack } from "@mui/material";
+import { Grid, Box, Card, Typography, Stack, TextField, Button, Alert } from "@mui/material";
 import Link from "next/link";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
-import AuthRegister from "../auth/AuthRegister";
+import { FormEvent, useState } from "react";
 
-const Register2 = () => (
-  <PageContainer title="Register" description="this is Register page">
-    <Box
-      sx={{
-        position: "relative",
-        "&:before": {
-          content: '""',
-          background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
-          backgroundSize: "400% 400%",
-          animation: "gradient 15s ease infinite",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          opacity: "0.3",
-        },
-      }}
-    >
-      <Grid
-        container
-        spacing={0}
-        justifyContent="center"
-        sx={{ height: "100vh" }}
+const Register2 = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Send POST request to the server
+    const response = await fetch('http://localhost:8080/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, email, password }),
+    });
+
+    const data = await response.json(); // Parse the JSON response
+    
+    if (response.ok) {
+      setMessage(data.message); // Success message
+      setIsError(false);
+      // Reset the form fields if needed
+      setUsername('');
+      setEmail('');
+      setPassword('');
+    } else {
+      setMessage(data.message); // Error message
+      setIsError(true);
+    }
+  }
+
+  return (
+    <PageContainer title="Register" description="this is Register page">
+      <Box
+        sx={{
+          position: "relative",
+          "&:before": {
+            content: '""',
+            background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
+            backgroundSize: "400% 400%",
+            animation: "gradient 15s ease infinite",
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            opacity: "0.3",
+          },
+        }}
       >
         <Grid
-          item
-          xs={12}
-          sm={12}
-          lg={4}
-          xl={3}
-          display="flex"
+          container
+          spacing={0}
           justifyContent="center"
-          alignItems="center"
+          sx={{ height: "100vh" }}
         >
-          <Card
-            elevation={9}
-            sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            lg={4}
+            xl={3}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
           >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <Logo />
-            </Box>
-            <AuthRegister
-              subtext={
+            <Card
+              elevation={9}
+              sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
+            >
+              <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
+                <Logo />
+              </Box>
+
+              {/* Registration Form */}
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="Username"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Button type="submit" variant="contained" color="primary" fullWidth>
+                  Register
+                </Button>
+              </form>
+
+              {/* Message Display */}
+              {message && (
+                <Alert severity={isError ? "error" : "success"} sx={{ mt: 2 }}>
+                  {message}
+                </Alert>
+              )}
+
+              {/* Subtitle Links */}
+              <Stack
+                direction="row"
+                justifyContent="center"
+                spacing={1}
+                mt={3}
+              >
                 <Typography
-                  variant="subtitle1"
-                  textAlign="center"
                   color="textSecondary"
-                  mb={1}
+                  variant="h6"
+                  fontWeight="400"
                 >
-                  Your Social Campaigns
+                  Already have an Account?
                 </Typography>
-              }
-              subtitle={
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  spacing={1}
-                  mt={3}
+                <Typography
+                  component={Link}
+                  href="/authentication/login"
+                  fontWeight="500"
+                  sx={{
+                    textDecoration: "none",
+                    color: "primary.main",
+                  }}
                 >
-                  <Typography
-                    color="textSecondary"
-                    variant="h6"
-                    fontWeight="400"
-                  >
-                    Already have an Account?
-                  </Typography>
-                  <Typography
-                    component={Link}
-                    href="/authentication/login"
-                    fontWeight="500"
-                    sx={{
-                      textDecoration: "none",
-                      color: "primary.main",
-                    }}
-                  >
-                    Sign In
-                  </Typography>
-                </Stack>
-              }
-            />
-          </Card>
+                  Sign In
+                </Typography>
+              </Stack>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
-  </PageContainer>
-);
+      </Box>
+    </PageContainer>
+  );
+}
 
 export default Register2;
