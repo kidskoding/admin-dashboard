@@ -3,7 +3,7 @@ import { Grid, Box, Card, Typography, Stack, TextField, Button, Alert } from "@m
 import Link from "next/link";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 const Register2 = () => {
   const [username, setUsername] = useState('');
@@ -12,7 +12,7 @@ const Register2 = () => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleRegistration = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const response = await fetch('http://localhost:8080/register', {
@@ -77,7 +77,7 @@ const Register2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
                 <Logo />
               </Box>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleRegistration}>
                 <TextField
                   label="Username"
                   variant="outlined"

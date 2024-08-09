@@ -8,7 +8,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    console.log('Registration route received');
     const { username, email, password } = req.body;
     if(!username || !email || !password) {
         return res.status(400).json({ message: 'All fields are required' });

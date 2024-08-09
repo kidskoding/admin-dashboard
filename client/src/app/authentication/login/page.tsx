@@ -1,12 +1,43 @@
 "use client";
 import Link from "next/link";
-import { Grid, Box, Card, Stack, Typography } from "@mui/material";
+import { Grid, Box, Card, Stack, Typography, TextField, Button, Alert } from "@mui/material";
 // components
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
+import { FormEvent, useState } from "react";
 
 const Login2 = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const response = await fetch('http://localhost:8080/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+
+    if(response.ok) {
+      setMessage(data.message);
+      setIsError(false);
+      setUsername('');
+      setPassword('');
+      window.location.href = '/'
+    } else {
+      setMessage(data.message);
+      setIsError(true);
+    }
+  }
+
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
@@ -47,45 +78,60 @@ const Login2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
-              <AuthLogin
-                subtext={
-                  <Typography
-                    variant="subtitle1"
-                    textAlign="center"
-                    color="textSecondary"
-                    mb={1}
-                  >
-                    Your Social Campaigns
-                  </Typography>
-                }
-                subtitle={
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    justifyContent="center"
-                    mt={3}
-                  >
-                    <Typography
-                      color="textSecondary"
-                      variant="h6"
-                      fontWeight="500"
-                    >
-                      New to Modernize?
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      href="/authentication/register"
-                      fontWeight="500"
-                      sx={{
-                        textDecoration: "none",
-                        color: "primary.main",
-                      }}
-                    >
-                      Create an account
-                    </Typography>
-                  </Stack>
-                }
-              />
+              <form onSubmit={handleLogin}>
+                <TextField
+                  label="Username"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Button type="submit" variant="contained" color="primary" fullWidth>
+                  Login
+                </Button>
+              </form>
+              {message && (
+                <Alert severity={isError ? "error" : "success"} sx={{ mt: 2 }}>
+                  {message}
+                </Alert>
+              )}
+              <Stack
+                direction="row"
+                justifyContent="center"
+                spacing={1}
+                mt={3}
+              >
+                <Typography
+                  color="textSecondary"
+                  variant="h6"
+                  fontWeight="400"
+                >
+                  Don't have an Account?
+                </Typography>
+                <Typography
+                  component={Link}
+                  href="/authentication/register"
+                  fontWeight="500"
+                  sx={{
+                    textDecoration: "none",
+                    color: "primary.main",
+                  }}
+                >
+                  Sign Up
+                </Typography>
+              </Stack>
             </Card>
           </Grid>
         </Grid>
