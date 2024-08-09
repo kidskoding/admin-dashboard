@@ -13,9 +13,8 @@ const Register2 = () => {
   const [isError, setIsError] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    // Send POST request to the server
     const response = await fetch('http://localhost:8080/', {
       method: 'POST',
       headers: {
@@ -24,17 +23,16 @@ const Register2 = () => {
       body: JSON.stringify({ username, email, password }),
     });
 
-    const data = await response.json(); // Parse the JSON response
+    const data = await response.json();
     
     if (response.ok) {
-      setMessage(data.message); // Success message
+      setMessage(data.message);
       setIsError(false);
-      // Reset the form fields if needed
       setUsername('');
       setEmail('');
       setPassword('');
     } else {
-      setMessage(data.message); // Error message
+      setMessage(data.message);
       setIsError(true);
     }
   }
@@ -79,8 +77,6 @@ const Register2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
                 <Logo />
               </Box>
-
-              {/* Registration Form */}
               <form onSubmit={handleSubmit}>
                 <TextField
                   label="Username"
@@ -115,15 +111,11 @@ const Register2 = () => {
                   Register
                 </Button>
               </form>
-
-              {/* Message Display */}
               {message && (
                 <Alert severity={isError ? "error" : "success"} sx={{ mt: 2 }}>
                   {message}
                 </Alert>
               )}
-
-              {/* Subtitle Links */}
               <Stack
                 direction="row"
                 justifyContent="center"
