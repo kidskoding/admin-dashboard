@@ -9,7 +9,7 @@ const client = new Client({
 });
 
 client.connect(err => {
-    if (err) {
+    if(err) {
         console.error('PostgreSQL connection error:', err.stack);
     } else {
         console.log('PostgreSQL connected...');
