@@ -77,7 +77,7 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
               Login
             </Button>
           )}
-          <Profile />
+          {isAuthenticated ? <Profile /> : null }
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>
