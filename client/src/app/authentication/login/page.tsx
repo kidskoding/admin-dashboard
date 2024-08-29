@@ -5,13 +5,17 @@ import { Grid, Box, Card, Stack, Typography, TextField, Button, Alert } from "@m
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const Login2 = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
+  const router = useRouter();
+  const {isAuthenticated, login, logout} = useAuth();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,11 +31,12 @@ const Login2 = () => {
     const data = await response.json();
 
     if(response.ok) {
+      login();
       setMessage(data.message);
       setIsError(false);
       setUsername('');
       setPassword('');
-      window.location.href = '/'
+      router.push('/');
     } else {
       setMessage(data.message);
       setIsError(true);

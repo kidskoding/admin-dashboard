@@ -12,9 +12,12 @@ import {
 } from "@mui/material";
 
 import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
+  const {isAuthenticated, login, logout} = useAuth();
+
   const handleClick2 = (event: any) => {
     setAnchorEl2(event.currentTarget);
   };
@@ -82,15 +85,28 @@ const Profile = () => {
           <ListItemText>My Tasks</ListItemText>
         </MenuItem>
         <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
-          >
-            Logout
-          </Button>
+          {isAuthenticated ? (
+            <Button
+              href="/authentication/login"
+              variant="outlined"
+              color="primary"
+              component={Link}
+              onClick={logout}
+              fullWidth
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              href="/authentication/login"
+              variant="outlined"
+              color="primary"
+              component={Link}
+              fullWidth
+            >
+              Login
+            </Button>
+          )}
         </Box>
       </Menu>
     </Box>
