@@ -77,7 +77,6 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
               Login
             </Button>
           )}
-
           <Profile />
         </Stack>
       </ToolbarStyled>
