@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
 import { Grid, Box, Card, Stack, Typography, TextField, Button, Alert } from "@mui/material";
-// components
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
 import { FormEvent, useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Login2 = () => {
   const [username, setUsername] = useState('');
@@ -15,7 +14,7 @@ const Login2 = () => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const router = useRouter();
-  const {isAuthenticated, login, logout} = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
