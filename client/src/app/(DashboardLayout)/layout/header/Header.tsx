@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ interface ItemType {
 }
 
 const Header = ({toggleMobileSidebar}: ItemType) => {
-  const {isAuthenticated, login, logout} = useAuth();
+  const {isAuthenticated, logout} = useAuth();
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 

@@ -10,13 +10,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-
 import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
 import { useAuth } from "@/context/AuthContext";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const {isAuthenticated, login, logout} = useAuth();
+  const {isAuthenticated, logout} = useAuth();
 
   const handleClick2 = (event: any) => {
     setAnchorEl2(event.currentTarget);

@@ -3,8 +3,7 @@ import Link from "next/link";
 import { Grid, Box, Card, Stack, Typography, TextField, Button, Alert } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
-import AuthLogin from "../auth/AuthLogin";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
