@@ -5,6 +5,7 @@ Authenticated a backend system using Node and Express with a PostgreSQL database
 
 <strong>8/15/2024 Update:</strong> Website updated to use PostgreSQL as the new database. The mysql branch in this repo contains the original code that utilizes a MySQL database!
 
+#### Please run <code>npm i</code> in your command line with this project in your current path to restore node modules for your development environment!
 
 ## Home Page
 Prior to Website Authentication
